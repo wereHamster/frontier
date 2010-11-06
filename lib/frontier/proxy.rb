@@ -2,6 +2,7 @@
 module Frontier
 
   class Proxy
+    instance_methods.each { |m| undef_method m unless m =~ /(^__.*__$)/ }
     attr_accessor :channel
 
     def initialize(object)
@@ -12,10 +13,6 @@ module Frontier
     def method_missing(name, *args)
       request = { :object => @object, :name => name, :args => args }
       return @channel.submit(request)
-    end
-
-    def to_s
-      method_missing(:to_s)
     end
 
     def inspect
