@@ -14,6 +14,10 @@ module Frontier
       return @channel.submit(request)
     end
 
+    def to_s
+      method_missing(:to_s)
+    end
+
   end
 
 end
