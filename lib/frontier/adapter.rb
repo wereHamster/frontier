@@ -16,27 +16,23 @@ module Frontier
       end
     end
 
+    def self.process(object, rx, tx)
+      req = Marshal.load(rx)
+      object = ObjectSpace._id2ref(req[:object]) if req.key?(:object)
+      reply = object.send(req[:name], *req[:args])
+      Marshal.dump(Adapter.wrap(reply), tx)
+    rescue Exception => e
+      Marshal.dump(e, tx)
+    ensure
+      tx.flush
+      return reply
+    end
 
-    def initialize
-      @cache = {}
 
+    def initialize(rx, tx, cache = {})
       while true do
-        begin
-          request = Marshal.load($stdin)
-
-          if request[:object]
-            object = ObjectSpace._id2ref(request[:object])
-          else
-            object = self
-          end
-
-          reply = object.send(request[:name], *request[:args])
-          @cache[reply.object_id] = reply
-          Marshal.dump(Adapter.wrap(reply), $stdout)
-        rescue Exception => e
-          Marshal.dump(e, $stdout)
-        end
-        $stdout.flush
+        reply = Adapter.process(self, rx, tx)
+        cache[reply.object_id] = reply if reply
       end
     end
 

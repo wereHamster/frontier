@@ -3,4 +3,4 @@
 require 'rubygems'
 require 'frontier'
 
-Frontier::Adapter.new
+Frontier::Adapter.new($stdin, $stdout)
