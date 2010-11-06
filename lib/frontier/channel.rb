@@ -3,27 +3,27 @@ module Frontier
 
   class Channel
 
-    def self.hydrate(channel, object)
-      case object
-      when Array, Hash
-        object.each { |o| Channel.hydrate(channel, o) }
-      when Proxy
-        object.channel = channel
-      end
-
-      return object
-    end
-
-
     def initialize(host, port)
       @channel = IO.popen("ssh #{host} frontier", "r+")
     end
 
     def submit(request)
       Marshal.dump(request, @channel)
-      return Channel.hydrate(self, Marshal.load(@channel))
+      return hydrate(Marshal.load(@channel))
     end
 
+  private
+
+    def hydrate(object)
+      case object
+      when Array, Hash
+        object.each { |o| hydrate(o) }
+      when Proxy
+        object.channel = self
+      end
+
+      return object
+    end
   end
 
 end
