@@ -49,17 +49,28 @@ Example
 -------
 
     require 'frontier'
-
     server = Frontier::Shell.new('user@server.tld')
 
+    # Run commands in the unix shell (bash or whatever you use)
     puts server.uname
     puts server.ls '*.rb'
-    
-    server.load('filesystem')
-    puts server['*.rb'].last
-    
+
+    # Find all ruby processes
     server.load('process')
     puts local.process.where(:command => /ruby/).fields(:pid, :rss).all
+
+    # Get a list of all *.rb files
+    server.load('filesystem')
+    puts server['*.rb']
+
+    # Recursively copy the ./config directory to the server
+    require 'pathname'
+    config = Pathname.new('./config/')
+    Frontier::Utils.xfer(server['destination/directory'], config)
+
+    # Copy file.txt from server to server2
+    server2 = Frontier::Shell.new('user@server2.tld')
+    Frontier::Utils.xfer(server2['.'], server['file.txt'])
 
 
 References
