@@ -4,10 +4,9 @@ class AdapterTest < Test::Unit::TestCase
 
   context "#wrap" do
 
-    should "preserve Numeric, String, Exception, Array and Hash class" do
-      [ Numeric, String, Exception, Array, Hash ].each do |klass|
-        obj = Frontier::Adapter.wrap(klass.new)
-        assert_instance_of(klass, obj)
+    should "preserve Nil, Boolean, Symbol, Numeric, String, Exception, Array and Hash class" do
+      [ nil, true, false, :sym, Numeric.new, String.new, Exception.new, Array.new, Hash.new ].each do |obj|
+        assert_instance_of(obj.class, Frontier::Adapter.wrap(obj))
       end
     end
 

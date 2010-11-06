@@ -5,7 +5,7 @@ module Frontier
 
     def self.wrap(object)
       case object
-      when Numeric, String, Exception
+      when NilClass, TrueClass, FalseClass, Symbol, Numeric, String, Exception
         return object
       when Array
         return object.map { |o| wrap(o) }
