@@ -18,6 +18,10 @@ module Frontier
       method_missing(:to_s)
     end
 
+    def inspect
+      "#<Frontier::Proxy #{method_missing(:inspect)}>"
+    end
+
   end
 
 end
