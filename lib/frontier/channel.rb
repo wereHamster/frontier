@@ -4,7 +4,7 @@ module Frontier
   class Channel
 
     def initialize(host, port)
-      @channel = IO.popen("ssh #{host} frontier", "r+")
+      @channel = IO.popen("ssh -p #{port} #{host} frontier", "r+")
     end
 
     def submit(request)
