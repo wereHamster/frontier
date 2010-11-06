@@ -6,7 +6,6 @@ module Frontier
     attr_accessor :channel
 
     def initialize(object)
-      @typename = object.class.to_s
       @object = object.object_id
     end
 
