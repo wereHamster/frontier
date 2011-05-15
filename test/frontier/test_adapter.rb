@@ -11,9 +11,10 @@ class AdapterTest < Test::Unit::TestCase
     end
 
     should "wrap custom classes in a proxy" do
-      class CustomClass; end
+      class CustomClass; def submit(*args); end; end
       obj = Frontier::Adapter.wrap(CustomClass.new)
-      assert_instance_of(Frontier::Proxy, obj)
+      obj.channel = CustomClass.new
+      assert_match(/^#<Frontier::Proxy/, obj.inspect)
     end
 
   end
