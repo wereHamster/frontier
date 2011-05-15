@@ -11,4 +11,7 @@ Gem::Specification.new do |s|
   s.platform     = Gem::Platform::RUBY
   s.files        = Dir.glob("lib/**/*") + %w[LICENSE README.md]
   s.executables  = ["frontier"]
+
+  s.add_development_dependency 'rake', '~> 0.8'
+  s.add_development_dependency 'shoulda', '~> 2.11'
 end
